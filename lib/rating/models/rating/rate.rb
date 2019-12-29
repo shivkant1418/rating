@@ -6,6 +6,7 @@ module Rating
     self.table_name        = ::Rating::Config.rate_table
 
     after_save :update_rating
+    after_destroy :update_rating
 
     belongs_to :author,    polymorphic: true
     belongs_to :resource,  polymorphic: true
