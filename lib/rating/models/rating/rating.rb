@@ -85,6 +85,24 @@ module Rating
         record.save
       end
 
+      def after_author_delete_update_rating(resource, scopeable)
+        attributes             = { resource: resource }
+        attributes[:scopeable] = unscoped_rating?(resource) ? nil : scopeable
+
+        record = find_by(attributes)
+
+        if record
+          result = data(resource, scopeable)
+
+          record.average  = result[:average]
+          record.sum      = result[:sum]
+          record.total    = result[:total]
+          record.estimate = result[:estimate]
+
+          record.save
+        end
+      end
+
       private
 
       def estimate(averager, values)

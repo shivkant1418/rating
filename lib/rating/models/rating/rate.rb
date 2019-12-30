@@ -6,7 +6,7 @@ module Rating
     self.table_name        = ::Rating::Config.rate_table
 
     after_save :update_rating
-    after_destroy :update_rating
+    after_destroy :after_author_delete_update_rating
 
     belongs_to :author,    polymorphic: true
     belongs_to :resource,  polymorphic: true
@@ -44,6 +44,10 @@ module Rating
 
     def update_rating
       ::Rating::Rating.update_rating resource, scopeable
+    end
+
+    def after_author_delete_update_rating
+      ::Rating::Rating.after_author_delete_update_rating resource, scopeable
     end
   end
 end
